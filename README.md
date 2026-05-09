@@ -19,7 +19,9 @@ ME304 공학설계 2조 — 배틀로봇 프로젝트
 
 1. 기본 소스 코드: `Balancing_Robot_v1.ino`
 2. `me304_arduino_libraries.zip` 파일을 아두이노 라이브러리 폴더에 압축 해제
+   보통 아래 경로에 있음
    ```
    C:\Documents\Arduino\libraries\
    ```
 3. 호환 보드 사용 시 CH340 드라이버 설치 필요
+4. 블루투스 무선통신은 BT_communication README 참고
