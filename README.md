@@ -1,26 +1,25 @@
-## ME304: BattleBot Project
+# ME304: BattleBot Project
 
-ME304 공학설계 2조
-배틀로봇 프로젝트
+ME304 공학설계 2조 — 배틀로봇 프로젝트
 
-### 1. Hardware
+---
 
-* **MCU**: Arduino Uno
-* **Sensor**: MPU-6050 (6-axis Gyro & Accelerometer)
-* **Motor**: DC motor
-* **Structure**: 3D printing
+## 1. 하드웨어
 
-### 2. Software
+- **MCU**: Arduino Uno
+- **센서**: MPU-6050 (6축 자이로 + 가속도계)
+- **모터**: DC 모터
+- **구조물**: 3D 프린팅
 
-* **Algorithm**: PID 제어
+## 2. 소프트웨어
 
+- **제어 알고리즘**: PID 제어
 
-### 3. Guid
+## 3. 사용 가이드
 
-1. Basic source code `Balancing_Robot_v1.ino` 
-2. Install libraries to zip file
-3. Extract the **me304_arduino_libraries.zip** file into your Arduino libraries folder to use the libraries.
-   In most cases, the path is as follows:
-   **`C:\Documents\Arduino\libraries\`**
-5. 호환 보드 사용 시 CH340 드라이버 설치가 필요함
-
+1. 기본 소스 코드: `Balancing_Robot_v1.ino`
+2. `me304_arduino_libraries.zip` 파일을 아두이노 라이브러리 폴더에 압축 해제
+   ```
+   C:\Documents\Arduino\libraries\
+   ```
+3. 호환 보드 사용 시 CH340 드라이버 설치 필요
