@@ -1,0 +1,5 @@
+{
+    "port": "COM3",
+    "board": "arduino:avr:uno",
+    "sketch": "Balancing_Robot_v1\\Balancing_Robot_v1.ino"
+}
