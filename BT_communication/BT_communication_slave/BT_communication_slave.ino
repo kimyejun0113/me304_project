@@ -7,8 +7,7 @@
  *   L298N: ENA→D10, IN1→D12, IN2→D6 | ENB→D11, IN3→D9, IN4→D8
  *   좌측 모터 OUT1/OUT2, 우측 모터 OUT3/OUT4
  *
- * 프로토콜 (마스터와 동일): vry,vrx,kp,ki,kd,atk
- *   PD만 사용 시 ki는 항상 0으로 와도 됨 (모터에는 미반영)
+ * 프로토콜 (마스터와 동일): vry,vrx,kp,kd,atk
  */
 
 #include <SoftwareSerial.h>
@@ -59,8 +58,8 @@ void loop() {
     line[--len] = '\0';
   }
 
-  int vry, vrx, kp, ki, kd, atk;
-  if (sscanf(line, "%d,%d,%d,%d,%d,%d", &vry, &vrx, &kp, &ki, &kd, &atk) != 6) {
+  int vry, vrx, kp, kd, atk;
+  if (sscanf(line, "%d,%d,%d,%d,%d", &vry, &vrx, &kp, &kd, &atk) != 5) {
     Serial.print(F("parse skip: "));
     Serial.println(line);
     return;
@@ -69,7 +68,6 @@ void loop() {
   vry = constrain(vry, 0, 254);
   vrx = constrain(vrx, 0, 254);
   kp = constrain(kp, 0, 1023);
-  ki = constrain(ki, 0, 1023);
   kd = constrain(kd, 0, 1023);
   atk = atk ? 1 : 0;
 
@@ -96,8 +94,6 @@ void loop() {
   Serial.print(vrx);
   Serial.print(F(" P="));
   Serial.print(kp);
-  Serial.print(F(" Ki="));
-  Serial.print(ki);
   Serial.print(F(" D="));
   Serial.print(kd);
   Serial.print(F(" ATK="));

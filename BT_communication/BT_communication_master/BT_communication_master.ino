@@ -19,34 +19,63 @@
 
 SoftwareSerial btSerial(2, 3);
 
-LiquidCrystal_I2C lcd(0x27, 16, 2);
+LiquidCrystal_I2C *lcd = nullptr;
 
 const int PIN_ATTACK = 4;
 
 unsigned long lastLcdMs = 0;
 
-static void drawLcd(int kp, int kd, int atk, int vrx, int vry) {
+static byte scanI2C() {
+  Serial.println(F("I2C scan..."));
+  byte found = 0;
+  for (byte addr = 1; addr < 127; addr++) {
+    Wire.beginTransmission(addr);
+    if (Wire.endTransmission() == 0) {
+      Serial.print(F("  found 0x"));
+      if (addr < 16) Serial.print('0');
+      Serial.println(addr, HEX);
+      if (!found) found = addr;
+    }
+  }
+  if (!found) Serial.println(F("  no I2C device!"));
+  return found;
+}
+
+static void drawLcd(int kp, int kd, int atk) {
+  if (!lcd) return;
   char row0[17];
   char row1[17];
 
-  snprintf(row0, sizeof(row0), "P:%4d  D:%4d", kp, kd);
-  snprintf(row1, sizeof(row1), "%s X%3d Y%3d", atk ? "ATK " : "--- ", vrx, vry);
+  snprintf(row0, sizeof(row0), "Kp:%4d Kd:%4d", kp, kd);
+  snprintf(row1, sizeof(row1), "%s", atk ? "ATK: ON  <<<<<  " : "ATK: OFF        ");
 
-  lcd.setCursor(0, 0);
-  lcd.print(row0);
-  lcd.setCursor(0, 1);
-  lcd.print(row1);
+  lcd->setCursor(0, 0);
+  lcd->print(row0);
+  lcd->setCursor(0, 1);
+  lcd->print(row1);
 }
 
 void setup() {
-  Wire.begin();
-  lcd.init();
-  lcd.backlight();
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print(F("Master Ready"));
-
   Serial.begin(9600);
+  Wire.begin();
+
+  byte addr = scanI2C();
+  if (addr == 0) {
+    Serial.println(F("LCD not detected, defaulting to 0x27"));
+    addr = 0x27;
+  }
+  Serial.print(F("LCD init @ 0x"));
+  Serial.println(addr, HEX);
+
+  lcd = new LiquidCrystal_I2C(addr, 16, 2);
+  lcd->init();
+  lcd->backlight();
+  lcd->clear();
+  lcd->setCursor(0, 0);
+  lcd->print(F("Master Ready"));
+  lcd->setCursor(0, 1);
+  lcd->print(F("0123456789ABCDEF"));
+
   btSerial.begin(9600);
   pinMode(PIN_ATTACK, INPUT_PULLUP);
 }
@@ -60,16 +89,16 @@ void loop() {
   int vry = constrain(map(analogRead(A3), 0, 1023, 0, 254), 0, 254);
   int atk = (digitalRead(PIN_ATTACK) == LOW) ? 1 : 0;
 
-  // 슬레이브 형식: vry,vrx,kp,ki,kd,atk — PD만 쓰므로 ki 자리는 항상 0
+  // 슬레이브 형식: vry,vrx,kp,kd,atk
   char buf[40];
-  snprintf(buf, sizeof(buf), "%d,%d,%d,0,%d,%d", vry, vrx, kp, kd, atk);
+  snprintf(buf, sizeof(buf), "%d,%d,%d,%d,%d", vry, vrx, kp, kd, atk);
 
   btSerial.println(buf);
   Serial.println(buf);
 
   if (now - lastLcdMs >= 120) {
     lastLcdMs = now;
-    drawLcd(kp, kd, atk, vrx, vry);
+    drawLcd(kp, kd, atk);
   }
 
   delay(50);
