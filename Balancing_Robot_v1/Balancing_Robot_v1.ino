@@ -61,9 +61,7 @@ double ki = 10;
 double kd = 20;
  
  
-// 기울일 각도 선택 
-// 제가 만든 밸런싱로봇에는 184.0도가 가장 최적의 평형각도였습니다
-// 각도가 180도를 기준으로 +-를 설정해주시면 됩니다
+
 double originalSetpoint = 238.5;
 double setpoint = originalSetpoint;
 double movingAngleOffset = 0.3;
