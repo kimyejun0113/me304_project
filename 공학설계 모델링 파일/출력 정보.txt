@@ -1,0 +1,11 @@
+upper main frame 1개
+middle main frame 1개
+downer main frame 1개
+
+upper pillar 1개
+downer pillar 1개
+p 6개
+
+motor bracket 2개 (필수는 아님) 모터 연결 하는 브라켓
+
+boxing_arm (필수 아님)
